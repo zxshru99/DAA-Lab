@@ -1,96 +1,60 @@
-/*
- * Program 9: Fractional Knapsack (Greedy)
- * Name: Samridh Chaudhary
- * Roll No: 2400320100976
- */
+// Fractional Knapsack
+// Name: Samridh Chaudhary
+// Roll No: 2400320100976
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <iomanip>
-
+#include <bits/stdc++.h>
 using namespace std;
 
 struct Item {
-    int id;
-    double weight;
-    double value;
+  int id;
+  double value, weight;
 };
 
-double ratioOf(const Item& item) {
-    return (item.weight > 0.0) ? (item.value / item.weight) : 0.0;
+bool cmp(Item a, Item b) {
+  double r1 = (a.weight > 0) ? a.value / a.weight : 0;
+  double r2 = (b.weight > 0) ? b.value / b.weight : 0;
+  return r1 > r2;
 }
 
 int main() {
-    cout << "Name: Samridh Chaudhary\n";
-    cout << "Roll No: 2400320100976\n";
-    cout << "Program: Fractional Knapsack\n\n";
+  cout << "Name: Samridh Chaudhary\n";
+  cout << "Roll No: 2400320100976\n\n";
 
-    int n;
-    double capacity;
+  int n;
+  double cap;
+  cout << "Enter number of items: ";
+  cin >> n;
 
-    cout << "Enter number of items: ";
-    cin >> n;
+  vector<Item> items(n);
+  for (int i = 0; i < n; i++) {
+    items[i].id = i + 1;
+    cout << "Enter value and weight of item " << i + 1 << ": ";
+    cin >> items[i].value >> items[i].weight;
+  }
 
-    if (n <= 0) {
-        cout << "Number of items must be positive.\n";
-        return 0;
+  cout << "Enter knapsack capacity: ";
+  cin >> cap;
+
+  sort(items.begin(), items.end(), cmp);
+
+  double ans = 0.0;
+  for (int i = 0; i < n && cap > 0; i++) {
+    if (items[i].weight <= 0) {
+      ans += items[i].value;
+      continue;
     }
-
-    vector<Item> items(n);
-    for (int i = 0; i < n; ++i) {
-        items[i].id = i + 1;
-        cout << "Enter value and weight for item " << items[i].id << ": ";
-        cin >> items[i].value >> items[i].weight;
+    if (items[i].weight <= cap) {
+      ans += items[i].value;
+      cap -= items[i].weight;
+      cout << "Item " << items[i].id << ": 100%\n";
+    } else {
+      double frac = cap / items[i].weight;
+      ans += items[i].value * frac;
+      cout << "Item " << items[i].id << ": " << fixed << setprecision(2) << frac * 100 << "%\n";
+      cap = 0;
     }
+  }
 
-    cout << "Enter knapsack capacity: ";
-    cin >> capacity;
-
-    if (capacity < 0) {
-        cout << "Capacity cannot be negative.\n";
-        return 0;
-    }
-
-    // Greedy choice: pick items with the highest value-to-weight ratio first.
-    sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
-        return ratioOf(a) > ratioOf(b);
-    });
-
-    double totalValue = 0.0;
-    double remaining = capacity;
-
-    cout << "\nSelected items:\n";
-    cout << fixed << setprecision(2);
-
-    for (const Item& item : items) {
-        if (item.weight <= 0) {
-            if (item.value > 0) {
-                totalValue += item.value;
-                cout << "Item " << item.id << ": 100.00% (weight 0, value " << item.value << ")\n";
-            }
-            continue;
-        }
-
-        if (remaining <= 0) {
-            break;
-        }
-
-        if (item.weight <= remaining) {
-            remaining -= item.weight;
-            totalValue += item.value;
-            cout << "Item " << item.id << ": 100.00% (value " << item.value << ")\n";
-        } else {
-            double fraction = remaining / item.weight;
-            double gained = item.value * fraction;
-            totalValue += gained;
-            remaining = 0.0;
-            cout << "Item " << item.id << ": " << (fraction * 100.0)
-                 << "% (value " << gained << ")\n";
-        }
-    }
-
-    cout << "\nMaximum value in knapsack = " << totalValue << "\n";
-
-    return 0;
+  cout << "Maximum profit = " << fixed << setprecision(2) << ans << endl;
+  return 0;
 }

@@ -1,78 +1,51 @@
-/*
- * Program 7: Counting Sort
- * Name: Samridh Chaudhary
- * Roll No: 2400320100976
- */
+// Counting Sort
+// Name: Samridh Chaudhary
+// Roll No: 2400320100976
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-void countingSort(vector<int>& arr) {
-    if (arr.empty()) {
-        return;
-    }
+void countingSort(int arr[], int n) {
+  if (n <= 0) return;
 
-    int minVal = *min_element(arr.begin(), arr.end());
-    int maxVal = *max_element(arr.begin(), arr.end());
-    int range = maxVal - minVal + 1;
+  int mn = *min_element(arr, arr + n);
+  int mx = *max_element(arr, arr + n);
+  int range = mx - mn + 1;
 
-    // Shift by minVal so negative numbers are handled cleanly too.
-    vector<int> count(range, 0);
-    for (int x : arr) {
-        ++count[x - minVal];
-    }
-
-    for (int i = 1; i < range; ++i) {
-        count[i] += count[i - 1];
-    }
-
-    // Iterate backwards to preserve stability for equal elements.
-    vector<int> output(arr.size());
-    for (int i = static_cast<int>(arr.size()) - 1; i >= 0; --i) {
-        int pos = --count[arr[i] - minVal];
-        output[pos] = arr[i];
-    }
-
-    arr = output;
+  vector<int> count(range, 0), output(n);
+  for (int i = 0; i < n; i++) count[arr[i] - mn]++;
+  for (int i = 1; i < range; i++) count[i] += count[i - 1];
+  for (int i = n - 1; i >= 0; i--) {
+    output[count[arr[i] - mn] - 1] = arr[i];
+    count[arr[i] - mn]--;
+  }
+  for (int i = 0; i < n; i++) arr[i] = output[i];
 }
 
-void printArray(const vector<int>& arr) {
-    for (int x : arr) {
-        cout << x << " ";
-    }
-    cout << "\n";
+void printArray(int arr[], int n) {
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
+  cout << endl;
 }
 
 int main() {
-    cout << "Name: Samridh Chaudhary\n";
-    cout << "Roll No: 2400320100976\n";
-    cout << "Program: Counting Sort\n\n";
+  cout << "Name: Samridh Chaudhary\n";
+  cout << "Roll No: 2400320100976\n\n";
 
-    int n;
-    cout << "Enter number of elements: ";
-    cin >> n;
+  int n;
+  cout << "Enter number of elements: ";
+  cin >> n;
 
-    if (n <= 0) {
-        cout << "Array size must be positive.\n";
-        return 0;
-    }
+  vector<int> arr(n);
+  cout << "Enter elements: ";
+  for (int i = 0; i < n; i++) cin >> arr[i];
 
-    vector<int> arr(n);
-    cout << "Enter " << n << " elements: ";
-    for (int i = 0; i < n; ++i) {
-        cin >> arr[i];
-    }
+  cout << "Before sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Original array: ";
-    printArray(arr);
+  countingSort(arr.data(), n);
 
-    countingSort(arr);
+  cout << "After sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Sorted array:   ";
-    printArray(arr);
-
-    return 0;
+  return 0;
 }

@@ -1,68 +1,44 @@
-/*
- * Program 4: Selection Sort
- * Name: Samridh Chaudhary
- * Roll No: 2400320100976
- */
+// Selection Sort
+// Name: Samridh Chaudhary
+// Roll No: 2400320100976
 
-#include <iostream>
-#include <vector>
-#include <utility>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-void selectionSort(vector<int>& arr) {
-    int n = static_cast<int>(arr.size());
-
-    for (int i = 0; i < n - 1; ++i) {
-        int minIdx = i;
-
-        // Find the smallest element in the remaining unsorted portion.
-        for (int j = i + 1; j < n; ++j) {
-            if (arr[j] < arr[minIdx]) {
-                minIdx = j;
-            }
-        }
-
-        if (minIdx != i) {
-            swap(arr[i], arr[minIdx]);
-        }
+void selectionSort(int arr[], int n) {
+  for (int i = 0; i < n - 1; i++) {
+    int minIdx = i;
+    for (int j = i + 1; j < n; j++) {
+      if (arr[j] < arr[minIdx]) minIdx = j;
     }
+    swap(arr[i], arr[minIdx]);
+  }
 }
 
-void printArray(const vector<int>& arr) {
-    for (int x : arr) {
-        cout << x << " ";
-    }
-    cout << "\n";
+void printArray(int arr[], int n) {
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
+  cout << endl;
 }
 
 int main() {
-    cout << "Name: Samridh Chaudhary\n";
-    cout << "Roll No: 2400320100976\n";
-    cout << "Program: Selection Sort\n\n";
+  cout << "Name: Samridh Chaudhary\n";
+  cout << "Roll No: 2400320100976\n\n";
 
-    int n;
-    cout << "Enter number of elements: ";
-    cin >> n;
+  int n;
+  cout << "Enter number of elements: ";
+  cin >> n;
 
-    if (n <= 0) {
-        cout << "Array size must be positive.\n";
-        return 0;
-    }
+  vector<int> arr(n);
+  cout << "Enter elements: ";
+  for (int i = 0; i < n; i++) cin >> arr[i];
 
-    vector<int> arr(n);
-    cout << "Enter " << n << " elements: ";
-    for (int i = 0; i < n; ++i) {
-        cin >> arr[i];
-    }
+  cout << "Before sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Original array: ";
-    printArray(arr);
+  selectionSort(arr.data(), n);
 
-    selectionSort(arr);
+  cout << "After sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Sorted array:   ";
-    printArray(arr);
-
-    return 0;
+  return 0;
 }

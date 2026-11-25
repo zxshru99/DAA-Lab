@@ -1,83 +1,56 @@
-/*
- * Program 8: Heap Sort
- * Name: Samridh Chaudhary
- * Roll No: 2400320100976
- */
+// Heap Sort
+// Name: Samridh Chaudhary
+// Roll No: 2400320100976
 
-#include <iostream>
-#include <vector>
-#include <utility>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// Restores the max-heap property for a subtree rooted at index `root`.
-void heapify(vector<int>& arr, int heapSize, int root) {
-    int largest = root;
-    int left = 2 * root + 1;
-    int right = 2 * root + 2;
+void heapify(int arr[], int n, int i) {
+  int largest = i;
+  int l = 2 * i + 1;
+  int r = 2 * i + 2;
 
-    if (left < heapSize && arr[left] > arr[largest]) {
-        largest = left;
-    }
-    if (right < heapSize && arr[right] > arr[largest]) {
-        largest = right;
-    }
+  if (l < n && arr[l] > arr[largest]) largest = l;
+  if (r < n && arr[r] > arr[largest]) largest = r;
 
-    if (largest != root) {
-        swap(arr[root], arr[largest]);
-        heapify(arr, heapSize, largest);
-    }
+  if (largest != i) {
+    swap(arr[i], arr[largest]);
+    heapify(arr, n, largest);
+  }
 }
 
-void heapSort(vector<int>& arr) {
-    int n = static_cast<int>(arr.size());
-
-    // Build max-heap bottom-up from the last non-leaf node.
-    for (int i = n / 2 - 1; i >= 0; --i) {
-        heapify(arr, n, i);
-    }
-
-    // Move the current maximum to the end and shrink the heap.
-    for (int end = n - 1; end > 0; --end) {
-        swap(arr[0], arr[end]);
-        heapify(arr, end, 0);
-    }
+void heapSort(int arr[], int n) {
+  for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);
+  for (int i = n - 1; i > 0; i--) {
+    swap(arr[0], arr[i]);
+    heapify(arr, i, 0);
+  }
 }
 
-void printArray(const vector<int>& arr) {
-    for (int x : arr) {
-        cout << x << " ";
-    }
-    cout << "\n";
+void printArray(int arr[], int n) {
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
+  cout << endl;
 }
 
 int main() {
-    cout << "Name: Samridh Chaudhary\n";
-    cout << "Roll No: 2400320100976\n";
-    cout << "Program: Heap Sort\n\n";
+  cout << "Name: Samridh Chaudhary\n";
+  cout << "Roll No: 2400320100976\n\n";
 
-    int n;
-    cout << "Enter number of elements: ";
-    cin >> n;
+  int n;
+  cout << "Enter number of elements: ";
+  cin >> n;
 
-    if (n <= 0) {
-        cout << "Array size must be positive.\n";
-        return 0;
-    }
+  vector<int> arr(n);
+  cout << "Enter elements: ";
+  for (int i = 0; i < n; i++) cin >> arr[i];
 
-    vector<int> arr(n);
-    cout << "Enter " << n << " elements: ";
-    for (int i = 0; i < n; ++i) {
-        cin >> arr[i];
-    }
+  cout << "Before sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Original array: ";
-    printArray(arr);
+  heapSort(arr.data(), n);
 
-    heapSort(arr);
+  cout << "After sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Sorted array:   ";
-    printArray(arr);
-
-    return 0;
+  return 0;
 }

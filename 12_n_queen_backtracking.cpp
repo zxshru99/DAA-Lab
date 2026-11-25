@@ -1,78 +1,59 @@
-/*
- * Program 12: N-Queen Problem using Backtracking
- * Name: Samridh Chaudhary
- * Roll No: 2400320100976
- */
+// N-Queen Problem using Backtracking
+// Name: Samridh Chaudhary
+// Roll No: 2400320100976
 
-#include <iostream>
-#include <vector>
-#include <cmath>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-bool isSafe(const vector<int>& queenCol, int row, int col) {
-    for (int prevRow = 0; prevRow < row; ++prevRow) {
-        int prevCol = queenCol[prevRow];
-        if (prevCol == col || abs(prevRow - row) == abs(prevCol - col)) {
-            return false;
-        }
-    }
-    return true;
+int solCount = 0;
+
+bool isSafe(vector<int>& board, int row, int col) {
+  for (int i = 0; i < row; i++) {
+    if (board[i] == col || abs(board[i] - col) == abs(i - row))
+      return false;
+  }
+  return true;
 }
 
-void printBoard(const vector<int>& queenCol, int solutionNumber) {
-    int n = static_cast<int>(queenCol.size());
-    cout << "Solution " << solutionNumber << ":\n";
-
-    for (int r = 0; r < n; ++r) {
-        for (int c = 0; c < n; ++c) {
-            cout << (queenCol[r] == c ? "Q " : ". ");
-        }
-        cout << "\n";
+void printBoard(vector<int>& board, int n) {
+  solCount++;
+  cout << "Solution " << solCount << ":\n";
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (board[i] == j) cout << "Q ";
+      else cout << ". ";
     }
-    cout << "\n";
+    cout << endl;
+  }
+  cout << endl;
 }
 
-void solveNQueen(int row, int n, vector<int>& queenCol, int& solutionCount) {
-    if (row == n) {
-        ++solutionCount;
-        printBoard(queenCol, solutionCount);
-        return;
+void solve(int row, int n, vector<int>& board) {
+  if (row == n) {
+    printBoard(board, n);
+    return;
+  }
+  for (int col = 0; col < n; col++) {
+    if (isSafe(board, row, col)) {
+      board[row] = col;
+      solve(row + 1, n, board);
     }
-
-    for (int col = 0; col < n; ++col) {
-        if (isSafe(queenCol, row, col)) {
-            queenCol[row] = col;
-            solveNQueen(row + 1, n, queenCol, solutionCount);
-            queenCol[row] = -1; // Backtrack.
-        }
-    }
+  }
 }
 
 int main() {
-    cout << "Name: Samridh Chaudhary\n";
-    cout << "Roll No: 2400320100976\n";
-    cout << "Program: N-Queen using Backtracking\n\n";
+  cout << "Name: Samridh Chaudhary\n";
+  cout << "Roll No: 2400320100976\n\n";
 
-    int n;
-    cout << "Enter board size N: ";
-    cin >> n;
+  int n;
+  cout << "Enter value of N: ";
+  cin >> n;
 
-    if (n <= 0) {
-        cout << "Board size must be positive.\n";
-        return 0;
-    }
+  vector<int> board(n, -1);
+  solve(0, n, board);
 
-    vector<int> queenCol(n, -1);
-    int solutionCount = 0;
+  if (solCount == 0) cout << "No solution exists.\n";
+  else cout << "Total solutions = " << solCount << endl;
 
-    solveNQueen(0, n, queenCol, solutionCount);
-
-    if (solutionCount == 0) {
-        cout << "No solutions exist for N = " << n << ".\n";
-    } else {
-        cout << "Total solutions found: " << solutionCount << "\n";
-    }
-
-    return 0;
+  return 0;
 }

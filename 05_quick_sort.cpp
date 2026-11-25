@@ -1,73 +1,55 @@
-/*
- * Program 5: Quick Sort
- * Name: Samridh Chaudhary
- * Roll No: 2400320100976
- */
+// Quick Sort
+// Name: Samridh Chaudhary
+// Roll No: 2400320100976
 
-#include <iostream>
-#include <vector>
-#include <utility>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-// Places the pivot (last element) at its final sorted position.
-int partition(vector<int>& arr, int low, int high) {
-    int pivot = arr[high];
-    int smallerEnd = low - 1;
-
-    for (int j = low; j < high; ++j) {
-        if (arr[j] <= pivot) {
-            ++smallerEnd;
-            swap(arr[smallerEnd], arr[j]);
-        }
+int partition(int arr[], int low, int high) {
+  int pivot = arr[high];
+  int i = low - 1;
+  for (int j = low; j < high; j++) {
+    if (arr[j] <= pivot) {
+      i++;
+      swap(arr[i], arr[j]);
     }
-
-    swap(arr[smallerEnd + 1], arr[high]);
-    return smallerEnd + 1;
+  }
+  swap(arr[i + 1], arr[high]);
+  return i + 1;
 }
 
-void quickSort(vector<int>& arr, int low, int high) {
-    if (low < high) {
-        int pivotIdx = partition(arr, low, high);
-        quickSort(arr, low, pivotIdx - 1);
-        quickSort(arr, pivotIdx + 1, high);
-    }
+void quickSort(int arr[], int low, int high) {
+  if (low < high) {
+    int pi = partition(arr, low, high);
+    quickSort(arr, low, pi - 1);
+    quickSort(arr, pi + 1, high);
+  }
 }
 
-void printArray(const vector<int>& arr) {
-    for (int x : arr) {
-        cout << x << " ";
-    }
-    cout << "\n";
+void printArray(int arr[], int n) {
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
+  cout << endl;
 }
 
 int main() {
-    cout << "Name: Samridh Chaudhary\n";
-    cout << "Roll No: 2400320100976\n";
-    cout << "Program: Quick Sort\n\n";
+  cout << "Name: Samridh Chaudhary\n";
+  cout << "Roll No: 2400320100976\n\n";
 
-    int n;
-    cout << "Enter number of elements: ";
-    cin >> n;
+  int n;
+  cout << "Enter number of elements: ";
+  cin >> n;
 
-    if (n <= 0) {
-        cout << "Array size must be positive.\n";
-        return 0;
-    }
+  vector<int> arr(n);
+  cout << "Enter elements: ";
+  for (int i = 0; i < n; i++) cin >> arr[i];
 
-    vector<int> arr(n);
-    cout << "Enter " << n << " elements: ";
-    for (int i = 0; i < n; ++i) {
-        cin >> arr[i];
-    }
+  cout << "Before sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Original array: ";
-    printArray(arr);
+  quickSort(arr.data(), 0, n - 1);
 
-    quickSort(arr, 0, n - 1);
+  cout << "After sorting: ";
+  printArray(arr.data(), n);
 
-    cout << "Sorted array:   ";
-    printArray(arr);
-
-    return 0;
+  return 0;
 }
